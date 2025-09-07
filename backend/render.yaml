@@ -1,0 +1,28 @@
+# Render deployment configuration for backend
+services:
+  - type: web
+    name: vidya-ai-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: GROQ_API_KEY
+        sync: false
+      - key: AZURE_SPEECH_KEY
+        sync: false
+      - key: AZURE_SPEECH_REGION
+        sync: false
+      - key: AZURE_VOICE_NAME
+        value: en-US-AriaNeural
+      - key: AZURE_VOICE_STYLE
+        value: chat
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://your-netlify-site.netlify.app
+      - key: BACKEND_HOST
+        value: 0.0.0.0
+      - key: BACKEND_PORT
+        value: 10000
