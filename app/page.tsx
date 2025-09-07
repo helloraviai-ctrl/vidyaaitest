@@ -21,6 +21,13 @@ export default function Home() {
     // Use environment variable for API URL, fallback to localhost for development
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     
+    // Debug environment variables
+    console.log('=== Environment Debug ===')
+    console.log('NODE_ENV:', process.env.NODE_ENV)
+    console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL)
+    console.log('API_BASE_URL:', API_BASE_URL)
+    console.log('========================')
+    
     try {
       console.log('Making API call to:', `${API_BASE_URL}/api/generate-content`)
       
@@ -138,6 +145,16 @@ export default function Home() {
           <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
             Enter any topic and watch your educational video play instantly!
           </p>
+          <div className="mt-4">
+            <a 
+              href="/test" 
+              className="text-blue-600 hover:text-blue-800 underline text-sm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🔧 API Connection Test
+            </a>
+          </div>
         </div>
 
         <div className="max-w-6xl mx-auto">
