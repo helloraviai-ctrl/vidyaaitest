@@ -25,5 +25,5 @@ services:
         value: https://your-netlify-site.netlify.app
       - key: BACKEND_HOST
         value: 0.0.0.0
-      - key: BACKEND_PORT
+      - key: PORT
         value: 10000
