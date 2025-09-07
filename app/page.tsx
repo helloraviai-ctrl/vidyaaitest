@@ -22,13 +22,26 @@ export default function Home() {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     
     try {
+      console.log('Making API call to:', `${API_BASE_URL}/api/generate-content`)
+      
       const response = await fetch(`${API_BASE_URL}/api/generate-content`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ topic, difficulty_level: 'beginner', target_audience: 'students' })
       })
       
+      console.log('Response status:', response.status)
+      console.log('Response headers:', response.headers)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log('Response data:', data)
       
       // Poll for status
       const pollStatus = async () => {
@@ -77,7 +90,13 @@ export default function Home() {
       
       pollStatus()
     } catch (error) {
-      alert('Error: ' + error)
+      console.error('API Error:', error)
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        API_BASE_URL: API_BASE_URL
+      })
+      alert(`Error: ${error.message}\n\nPlease check the browser console for more details.`)
       setIsGenerating(false)
     }
   }
