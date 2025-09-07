@@ -1,4 +1,5 @@
 # Render deployment configuration for backend
+# This file should be in the backend folder
 services:
   - type: web
     name: vidya-ai-backend
