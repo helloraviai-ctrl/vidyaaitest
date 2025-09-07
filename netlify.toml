@@ -71,7 +71,7 @@
 # API proxy for backend (if needed)
 [[redirects]]
   from = "/api/*"
-  to = "https://your-backend-app.onrender.com/api/:splat"
+  to = "https://vidyaaibot.onrender.com/api/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
