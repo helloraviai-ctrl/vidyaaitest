@@ -26,12 +26,14 @@ Netlify will auto-detect the settings from `netlify.toml`, but verify:
 - **Publish directory**: `out`
 - **Node version**: `18`
 
-### Step 3: Environment Variables (Optional)
+### Step 3: Environment Variables (Required)
 
-If you need any frontend environment variables:
+You need to set the backend API URL:
 
 1. Go to Site settings → Environment variables
-2. Add any required variables
+2. Add the following variable:
+   - **Key**: `NEXT_PUBLIC_API_URL`
+   - **Value**: `https://your-backend-url.herokuapp.com` (replace with your actual backend URL)
 
 ### Step 4: Deploy
 
@@ -122,8 +124,15 @@ CORS_ORIGINS=https://your-site-name.netlify.app
 
 ### Frontend (Netlify Environment Variables)
 
+**Required for production deployment:**
+
 ```env
 NEXT_PUBLIC_API_URL=https://your-backend-url.herokuapp.com
+```
+
+**For local development, create `.env.local`:**
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ## 📱 Mobile Optimization

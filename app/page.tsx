@@ -18,8 +18,11 @@ export default function Home() {
     setVideoData(null)
     setIsPlaying(false)
     
+    // Use environment variable for API URL, fallback to localhost for development
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    
     try {
-      const response = await fetch('http://localhost:8000/api/generate-content', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-content`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, difficulty_level: 'beginner', target_audience: 'students' })
@@ -29,7 +32,7 @@ export default function Home() {
       
       // Poll for status
       const pollStatus = async () => {
-        const statusResponse = await fetch(`http://localhost:8000/api/status/${data.job_id}`)
+        const statusResponse = await fetch(`${API_BASE_URL}/api/status/${data.job_id}`)
         const status = await statusResponse.json()
         
         if (status.status === 'completed') {
@@ -40,16 +43,16 @@ export default function Home() {
           if (videoPath) {
             // If we have a video path, construct the URL
             if (videoPath.includes('.mp4')) {
-              videoUrl = `http://localhost:8000/api/video/${data.job_id}`
+              videoUrl = `${API_BASE_URL}/api/video/${data.job_id}`
             } else if (videoPath.includes('.png') || videoPath.includes('.jpg')) {
-              videoUrl = `http://localhost:8000/api/video/${data.job_id}`
+              videoUrl = `${API_BASE_URL}/api/video/${data.job_id}`
             } else {
               // For text files or other content, still try the video endpoint
-              videoUrl = `http://localhost:8000/api/video/${data.job_id}`
+              videoUrl = `${API_BASE_URL}/api/video/${data.job_id}`
             }
           } else {
             // Fallback: try the video endpoint anyway
-            videoUrl = `http://localhost:8000/api/video/${data.job_id}`
+            videoUrl = `${API_BASE_URL}/api/video/${data.job_id}`
           }
           
           // Create video data object with the video URL and status info
