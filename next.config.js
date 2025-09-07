@@ -5,24 +5,6 @@ const nextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   
-  // App directory is now stable in Next.js 14, no need for experimental flag
-  // Configure for file uploads and downloads
-  async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
-        ],
-      },
-    ]
-  },
-  // Mobile optimizations
-  experimental: {
-    optimizeCss: true,
-  },
   // Image optimization for mobile
   images: {
     unoptimized: true, // Required for static export
