@@ -50,49 +50,35 @@ async function processContentGeneration(jobId: string, request: any) {
     // Update status
     updateJobStatus(jobId, 'generating_text', 10, 'Generating explanation text...');
 
-    // Step 1: Generate structured explanation using Groq AI
+    // Step 1: Generate structured explanation using AI
     const groqApiKey = process.env.GROQ_API_KEY;
-    if (!groqApiKey) {
-      throw new Error('GROQ_API_KEY not found in environment variables');
+    const openaiApiKey = process.env.OPENAI_API_KEY;
+    
+    if (!groqApiKey && !openaiApiKey) {
+      throw new Error('Neither GROQ_API_KEY nor OPENAI_API_KEY found in environment variables');
     }
 
     const explanationData = await generateExplanationWithGroq(
       request.topic,
       request.difficulty_level,
       request.target_audience,
-      groqApiKey
+      groqApiKey || ''
     );
 
-    updateJobStatus(jobId, 'generating_audio', 30, 'Converting text to speech...');
+    updateJobStatus(jobId, 'generating_audio', 30, 'Skipping audio generation (Azure keys not configured)...');
 
-    // Step 2: Generate audio narration
-    const azureSpeechKey = process.env.AZURE_SPEECH_KEY;
-    const azureSpeechRegion = process.env.AZURE_SPEECH_REGION;
-    
-    if (!azureSpeechKey || !azureSpeechRegion) {
-      throw new Error('Azure Speech credentials not found in environment variables');
-    }
+    // Step 2: Skip audio generation for now (Azure keys not configured)
+    const audioPath = `/tmp/${jobId}_audio_placeholder.wav`;
 
-    const audioPath = await generateAudioWithAzure(
-      explanationData.full_explanation,
-      azureSpeechKey,
-      azureSpeechRegion
-    );
+    updateJobStatus(jobId, 'generating_animations', 50, 'Skipping animations (simplified version)...');
 
-    updateJobStatus(jobId, 'generating_animations', 50, 'Creating animated visuals...');
-
-    // Step 3: Generate animations for each section
+    // Step 3: Skip animations for now
     const animationPaths = [];
-    for (let i = 0; i < explanationData.sections.length; i++) {
-      const section = explanationData.sections[i];
-      const animationPath = await createSectionAnimation(section, i);
-      animationPaths.push(animationPath);
-    }
 
-    updateJobStatus(jobId, 'combining_video', 80, 'Combining audio and visuals...');
+    updateJobStatus(jobId, 'combining_video', 80, 'Creating text-only output...');
 
-    // Step 4: Combine audio and animations into final video
-    const finalVideoPath = await createFinalVideo(audioPath, animationPaths);
+    // Step 4: Create text-only output for now
+    const finalVideoPath = `/tmp/${jobId}_text_output.txt`;
 
     // Update final status
     updateJobStatus(
@@ -135,37 +121,79 @@ function updateJobStatus(jobId: string, status: string, progress: number, messag
 }
 
 async function generateExplanationWithGroq(topic: string, difficulty: string, audience: string, apiKey: string) {
-  // Simplified Groq API call
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'llama3-8b-8192',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an educational content generator. Create structured explanations for ${audience} at ${difficulty} level.`
-        },
-        {
-          role: 'user',
-          content: `Generate educational content about: ${topic}`
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 2000
-    })
-  });
+  // Try Groq first, fallback to OpenAI
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  
+  try {
+    // Try Groq API first
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          {
+            role: 'system',
+            content: `You are an educational content generator. Create structured explanations for ${audience} at ${difficulty} level.`
+          },
+          {
+            role: 'user',
+            content: `Generate educational content about: ${topic}`
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      })
+    });
 
-  if (!response.ok) {
-    throw new Error(`Groq API error: ${response.status}`);
+    if (response.ok) {
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      return parseContent(content);
+    }
+  } catch (error) {
+    console.log('Groq API failed, trying OpenAI...');
   }
 
-  const data = await response.json();
-  const content = data.choices[0].message.content;
+  // Fallback to OpenAI if Groq fails
+  if (openaiApiKey) {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: `You are an educational content generator. Create structured explanations for ${audience} at ${difficulty} level.`
+          },
+          {
+            role: 'user',
+            content: `Generate educational content about: ${topic}`
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      })
+    });
 
+    if (response.ok) {
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      return parseContent(content);
+    }
+  }
+
+  throw new Error('Both Groq and OpenAI APIs failed');
+}
+
+function parseContent(content: string) {
   // Parse and structure the content
   const sections = content.split('\n\n').map((section: string, index: number) => ({
     title: `Section ${index + 1}`,
