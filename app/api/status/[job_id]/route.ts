@@ -28,8 +28,9 @@ export async function GET(
 
   } catch (error) {
     console.error('Error in status check:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to check job status' },
+      { error: `Failed to check job status: ${errorMessage}` },
       { status: 500 }
     );
   }

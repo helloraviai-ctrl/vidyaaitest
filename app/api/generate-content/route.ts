@@ -37,8 +37,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error in generate-content:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to start content generation' },
+      { error: `Failed to start content generation: ${errorMessage}` },
       { status: 500 }
     );
   }
@@ -110,11 +111,12 @@ async function processContentGeneration(jobId: string, request: any) {
 
   } catch (error) {
     console.error('Error in processContentGeneration:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     updateJobStatus(
       jobId,
       'failed',
       processingJobs.get(jobId)?.progress || 0,
-      `Content generation failed: ${error.message}`
+      `Content generation failed: ${errorMessage}`
     );
   }
 }

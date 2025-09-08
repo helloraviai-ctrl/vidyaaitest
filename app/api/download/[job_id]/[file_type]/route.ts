@@ -82,8 +82,9 @@ export async function GET(
 
   } catch (error) {
     console.error('Error in file download:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to download file' },
+      { error: `Failed to download file: ${errorMessage}` },
       { status: 500 }
     );
   }
