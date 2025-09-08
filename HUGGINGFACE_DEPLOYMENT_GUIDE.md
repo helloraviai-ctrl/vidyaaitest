@@ -14,6 +14,20 @@ You'll create **two separate Hugging Face Spaces**:
 1. **Backend Space**: Docker-based FastAPI service
 2. **Frontend Space**: Static Next.js application
 
+## 🚀 Auto-Deploy Setup (Recommended)
+
+For automatic deployment from GitHub, see the [AUTO_DEPLOY_SETUP.md](./AUTO_DEPLOY_SETUP.md) guide.
+
+**Quick Auto-Deploy Setup:**
+1. Create HF Spaces (backend + frontend)
+2. Get HF token from [settings](https://huggingface.co/settings/tokens)
+3. Add `HF_TOKEN` secret to GitHub repository
+4. Set environment variables in HF Spaces
+5. Push code to GitHub - auto-deploy happens!
+
+**Manual Deployment:**
+Use the `deploy.sh` script or follow the manual steps below.
+
 ## Step 1: Deploy Backend to Hugging Face Spaces
 
 ### 1.1 Create Backend Space
