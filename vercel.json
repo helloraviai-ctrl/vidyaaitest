@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "functions": {
     "app/api/generate-content/route.ts": {
       "maxDuration": 300
@@ -16,10 +10,5 @@
     "app/api/download/[job_id]/[file_type]/route.ts": {
       "maxDuration": 60
     }
-  },
-  "env": {
-    "GROQ_API_KEY": "@groq_api_key",
-    "AZURE_SPEECH_KEY": "@azure_speech_key",
-    "AZURE_SPEECH_REGION": "@azure_speech_region"
   }
 }
