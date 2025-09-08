@@ -98,12 +98,14 @@ export default function Home() {
       pollStatus()
     } catch (error) {
       console.error('API Error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorStack = error instanceof Error ? error.stack : 'No stack trace available';
       console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
+        message: errorMessage,
+        stack: errorStack,
         API_BASE_URL: API_BASE_URL
       })
-      alert(`Error: ${error.message}\n\nPlease check the browser console for more details.`)
+      alert(`Error: ${errorMessage}\n\nPlease check the browser console for more details.`)
       setIsGenerating(false)
     }
   }
