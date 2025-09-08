@@ -33,7 +33,13 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for now - in production, specify exact domains
+    allow_origins=[
+        "*",  # Allow all origins for Hugging Face Spaces
+        "https://*.hf.space",
+        "https://*.huggingface.co",
+        "http://localhost:3000",
+        "http://localhost:3001"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

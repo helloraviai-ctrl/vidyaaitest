@@ -1,49 +1,53 @@
-# 🚀 Vidya AI Backend
+---
+title: Vidya AI Backend
+emoji: 🎓
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+license: mit
+app_port: 7860
+---
 
-This is the Python FastAPI backend for the Vidya AI educational content generator.
+# Vidya AI Educational Content Generator - Backend
 
-## 🎯 **For Render Deployment:**
+AI-powered backend service for generating educational content with video, audio, and text explanations.
 
-### **Important Configuration:**
-- **Root Directory**: `backend` (when deploying to Render)
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `python main.py`
-- **Environment**: Python 3.12
+## Features
 
-### **Required Environment Variables:**
-```
-GROQ_API_KEY=your_groq_api_key_here
-AZURE_SPEECH_KEY=your_azure_speech_key_here
-AZURE_SPEECH_REGION=your_azure_region_here
-AZURE_VOICE_NAME=en-US-AriaNeural
-AZURE_VOICE_STYLE=chat
-OPENAI_API_KEY=your_openai_api_key_here (optional)
-CORS_ORIGINS=https://your-netlify-site.netlify.app
-```
+- 🤖 **AI Content Generation**: Uses Groq AI for fast, structured educational explanations
+- 🎤 **Text-to-Speech**: Azure Speech Services for high-quality narration
+- 🎬 **Animation Generation**: Manim-based animations for visual learning
+- 🎥 **Video Creation**: Combines audio and visuals into educational videos
+- 🚀 **Fast Processing**: Optimized for quick content generation
 
-### **Deployment Steps:**
-1. Go to [render.com](https://render.com)
-2. Create new Web Service
-3. Connect repository: `helloraviai-ctrl/vidyaaitest`
-4. **Set Root Directory to `backend`**
-5. Add environment variables
-6. Deploy!
+## API Endpoints
 
-## 🔧 **Local Development:**
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-```
-
-## 📱 **API Endpoints:**
 - `GET /` - Health check
 - `POST /api/generate-content` - Generate educational content
 - `GET /api/status/{job_id}` - Check processing status
-- `GET /api/video/{job_id}` - Get generated video
+- `GET /api/download/{job_id}/{file_type}` - Download generated files
 
-## 🎉 **After Deployment:**
-Your backend will be available at: `https://your-app.onrender.com`
-Use this URL in your Netlify environment variable: `NEXT_PUBLIC_API_URL`
+## Environment Variables
+
+Set these in your Hugging Face Space settings:
+
+```
+GROQ_API_KEY=your_groq_api_key
+AZURE_SPEECH_KEY=your_azure_speech_key
+AZURE_SPEECH_REGION=your_azure_region
+OPENAI_API_KEY=your_openai_api_key (optional)
+STABILITY_API_KEY=your_stability_api_key (optional)
+```
+
+## Usage
+
+The backend automatically starts when the Space is deployed. It provides a REST API for the frontend to consume.
+
+## Tech Stack
+
+- **FastAPI**: Modern Python web framework
+- **Groq AI**: Fast AI inference
+- **Azure Speech**: Text-to-speech services
+- **Manim**: Mathematical animations
+- **MoviePy**: Video processing
