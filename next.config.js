@@ -14,14 +14,9 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  // API configuration
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://vidyaaibot.onrender.com/api/:path*',
-      },
-    ]
+  // Experimental features for serverless functions
+  experimental: {
+    serverComponentsExternalPackages: ['groq', 'azure-cognitiveservices-speech'],
   },
 }
 

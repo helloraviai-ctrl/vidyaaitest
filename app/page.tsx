@@ -18,8 +18,8 @@ export default function Home() {
     setVideoData(null)
     setIsPlaying(false)
     
-    // Use environment variable for API URL, fallback to localhost for development
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    // Use local API routes for Vercel deployment
+    const API_BASE_URL = ''
     
     // Debug environment variables
     console.log('=== Environment Debug ===')

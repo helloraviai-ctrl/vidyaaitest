@@ -13,9 +13,9 @@
 ## Tech Stack
 
 - **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend**: FastAPI, Python
+- **Backend**: Vercel Serverless Functions (API Routes)
 - **AI Services**: Groq AI, Azure Speech Services
-- **Deployment**: Vercel (Frontend), Render (Backend)
+- **Deployment**: Vercel (Full Stack)
 
 ## Quick Start
 
@@ -26,22 +26,15 @@
 
 ## Deployment
 
-### Frontend (Vercel)
+### Full Stack (Vercel)
 - **Guide**: See `VERCEL_DEPLOYMENT_GUIDE.md`
 - **URL**: Your Vercel deployment URL
-
-### Backend (Render)
-- **URL**: https://vidyaaibot.onrender.com
-- **API Documentation**: Available at backend URL
+- **API Routes**: Built-in serverless functions
 
 ## Environment Variables
 
-### Frontend
-```
-NEXT_PUBLIC_API_URL=https://vidyaaibot.onrender.com
-```
+Set these in your Vercel project settings:
 
-### Backend
 ```
 GROQ_API_KEY=your_groq_api_key
 AZURE_SPEECH_KEY=your_azure_speech_key
